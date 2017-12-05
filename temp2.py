@@ -13,10 +13,10 @@ sent_max_len = 40
 word_max_len = 25
 char_codes = 91
 char_embed_size = 50
-word_embed_size = 300
-sent_embed_size = 600
+word_embed_size = 500
+sent_embed_size = 300
 no_of_classes = 45
-learning_rate = 0.001
+learning_rate = 0.01
 
 # Placeholder
 char_id = tf.placeholder(dtype=tf.int32, shape=[None, word_max_len])
