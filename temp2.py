@@ -108,6 +108,7 @@ with tf.Session() as sess:
             start = batch_size_counter
             batch_size_counter = batch_size + batch_size_counter
             sess.run(train_op, feed_dict=feed_dict)
+            # print(i)
             if (i % 10) == 0:
                 _, cost, acc_result = sess.run((train_op, loss, accuracy), feed_dict=feed_dict)
                 print('Cost and accuracy for iteration %d is %0.3f and %0.3f:' % (i, cost, acc_result))
