@@ -47,8 +47,8 @@ with tf.name_scope("WordLayer"):
         # print(output_sent)                                                                # shape=(12550, 600)
 
 with tf.name_scope("ForwardLayer"):
-    h_layer_weights = tf.Variable(tf.random_normal([sent_embed_size, 4]))
-    h_layer_bias = tf.Variable(tf.zeros([4]))
+    h_layer_weights = tf.Variable(tf.random_normal([sent_embed_size, no_of_classes]))
+    h_layer_bias = tf.Variable(tf.zeros([no_of_classes]))
     predicted_output = tf.matmul(output_sent, h_layer_weights) + h_layer_bias
     # print(predicted_output)                                                               # shape=(12550, 45)
 
@@ -81,14 +81,12 @@ with tf.Session() as sess:
 
     char_id_batch, word_id_batch, pos_id_batch = temp1.retrieve_batch_sent(start, batch_size_counter, sent_max_len, word_max_len)
     feed_dict = {char_id: char_id_batch, word_id: word_id_batch, y: pos_id_batch}
-    c, w, o, p = sess.run((yy, yyz, y_reshape, predicted_output), feed_dict=feed_dict)
+    c, w, o = sess.run((yy, yyz, y_reshape), feed_dict=feed_dict)
     print(c)
     print('\n')
     print(w)
     print('\n')
     print(o)
-    print('\n')
-    print(p)
 
     # for i in range(1, itr):
     #     if i%reset_point != 0:
