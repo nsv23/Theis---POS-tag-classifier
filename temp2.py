@@ -31,16 +31,20 @@ with tf.name_scope("CharacterLayer"):
         # print(char_lookup.get_shape())
         char_train = tf.unstack(value=char_lookup, axis=1)
         # print(char_train)
+
         char_lstm_cell = rnn.BasicLSTMCell(word_embed_size, forget_bias=1)
-        output_words, _ = rnn.static_rnn(cell=char_lstm_cell, inputs=char_train, dtype=tf.float32)
+        char_multi_cell = rnn.MultiRNNCell([char_lstm_cell] * 2)
+        output_words, _ = rnn.static_rnn(cell=char_multi_cell, inputs=char_train, dtype=tf.float32)
         # print(output_words[-1].get_shape())
 
 with tf.name_scope("WordLayer"):
     with tf.variable_scope("WordLayer"):
         batch_word_lookup = tf.nn.embedding_lookup(output_words[-1], word_id)
         word_train = tf.unstack(batch_word_lookup, axis=1)
+
         word_lstm_cell = rnn.BasicLSTMCell(sent_embed_size, forget_bias=1)
-        output_sent, _ = rnn.static_rnn(word_lstm_cell, word_train, dtype=tf.float32)
+        word_multi_cell = rnn.MultiRNNCell([word_lstm_cell] * 3)
+        output_sent, _ = rnn.static_rnn(cell=word_multi_cell, inputs=word_train, dtype=tf.float32)
         # print(output_sent[-1].get_shape())
         output_sent = tf.concat(output_sent, axis=0)
         # output_sent = tf.reshape(output_sent, [-1, sent_embed_size])
