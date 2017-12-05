@@ -50,28 +50,28 @@ with tf.name_scope("ForwardLayer"):
     h_layer_weights = tf.Variable(tf.random_normal([sent_embed_size, no_of_classes]))
     h_layer_bias = tf.Variable(tf.zeros([no_of_classes]))
     predicted_output = tf.matmul(output_sent, h_layer_weights) + h_layer_bias
-    # print(predicted_output)                                                               # shape=(12550, 45)
+    print(predicted_output)                                                               # shape=(12550, 45)
 
 with tf.name_scope("CostFunction"):
-    # y_reshape = tf.reshape(y, [-1, 1])                                                      # (1200,1)*
-    y_reshape = tf.reshape(y, [-1])                                                         # Tensor("CostFunction/Reshape:0", shape=(1200,), dtype=int32)
-    # print(y_reshape)
+    y_reshape = tf.reshape(y, [-1, 1])                                                      # (1200,1)*
+    # y_reshape = tf.reshape(y, [-1])                                                       # Tensor("CostFunction/Reshape:0", shape=(1200,), dtype=int32)
+    print(y_reshape)
     weights = tf.cast(tf.where(y_reshape > 0, tf.ones_like(y_reshape), tf.zeros_like(y_reshape)), tf.float32)
     y_reshape = tf.one_hot(y_reshape, depth=no_of_classes)
-    # print(y_reshape)                                                                       #Tensor("CostFunction/one_hot:0", shape=(1200, 45), dtype=float32) # shape=(12550, 1, 45)*
+    print(y_reshape)                                                                       # Tensor("CostFunction/one_hot:0", shape=(1200, 45), dtype=float32) # shape=(12550, 1, 45)*
     # y_reshape = tf.unstack(y_reshape, axis=1)
-    # print(y_reshape)                                                                       # shape=(12550, 45)*
+    # print(y_reshape)                                                                     # shape=(12550, 45)*
     loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=predicted_output, labels=y_reshape) * weights)
 
 with tf.name_scope("Optimizer"):
     train_op = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss)
     # train_op = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(loss)
 
-with tf.name_scope("Accuracy"):
-    # print(predicted_output.get_shape())
-    # print(y_reshape)
-    correct_prediction = tf.equal(tf.argmax(predicted_output, 1), tf.argmax(y_reshape, 1))
-    accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+# with tf.name_scope("Accuracy"):
+#     # print(predicted_output.get_shape())
+#     # print(y_reshape)
+#     correct_prediction = tf.equal(tf.argmax(predicted_output, 1), tf.argmax(y_reshape, 1))
+#     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
 # Graph executions
 with tf.Session() as sess:
@@ -95,8 +95,8 @@ with tf.Session() as sess:
             # print((np.shape(pos_id_batch)))
             start = batch_size_counter
             batch_size_counter = batch_size + batch_size_counter
-            _, acc = sess.run((train_op, accuracy), feed_dict=feed_dict)
-            print('iteration:', i, ' ', "Accuracy: ", ' - ', acc)
+            _, ls = sess.run((train_op, loss), feed_dict=feed_dict)
+            print('Loss at iteration %d is: %.3f' % (i, ls))
             # if (i % 10) == 0:
             #     acc_result = sess.run(accuracy, feed_dict=feed_dict)
             #     print('iteration: ', i, ' ', "Accuracy: ", i, ' - ', acc_result)
