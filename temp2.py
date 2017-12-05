@@ -81,18 +81,16 @@ with tf.name_scope("Optimizer"):
     train_op = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss)
     # train_op = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(loss)
 
-# with tf.name_scope("Accuracy"):
-#     # print(predicted_output.get_shape())
-#     # print(y_reshape)
-#     correct_prediction = tf.equal(tf.argmax(predicted_output, 1), tf.argmax(y_reshape, 1))
-#     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+with tf.name_scope("Accuracy"):
+    # print(predicted_output.get_shape())
+    # print(y_reshape)
+    correct_prediction = tf.equal(tf.argmax(predicted_output, 1), tf.argmax(y_reshape, 1))
+    accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
 # Graph executions
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
 
-    char_id_batch, word_id_batch, pos_id_batch = temp1.retrieve_batch_sent(start, batch_size_counter, sent_max_len, word_max_len)
-    feed_dict = {char_id: char_id_batch, word_id: word_id_batch, y: pos_id_batch}
     for i in range(1, itr):
         if i%reset_point != 0:
             char_id_batch, word_id_batch, pos_id_batch = temp1.retrieve_batch_sent(start, batch_size_counter, sent_max_len, word_max_len)
@@ -109,11 +107,10 @@ with tf.Session() as sess:
             # print((np.shape(pos_id_batch)))
             start = batch_size_counter
             batch_size_counter = batch_size + batch_size_counter
-            _, ls = sess.run((train_op, loss), feed_dict=feed_dict)
-            print('Loss at iteration %d is: %.3f' % (i, ls))
-            # if (i % 10) == 0:
-            #     acc_result = sess.run(accuracy, feed_dict=feed_dict)
-            #     print('iteration: ', i, ' ', "Accuracy: ", i, ' - ', acc_result)
+            sess.run(train_op, feed_dict=feed_dict)
+            if (i % 10) == 0:
+                _, cost, acc_result = sess.run((train_op, loss, accuracy), feed_dict=feed_dict)
+                print('Cost and accuracy for iteration %d is %0.3f and %0.3f:' % (i, cost, acc_result))
         else:
             # print("hello")
             start = 0
