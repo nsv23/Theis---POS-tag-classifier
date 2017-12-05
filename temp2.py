@@ -17,6 +17,8 @@ word_embed_size = 500
 sent_embed_size = 300
 no_of_classes = 45
 learning_rate = 0.01
+char_layer_multiRnn = 2
+word_layer_multiRnn = 3
 
 # Placeholder
 char_id = tf.placeholder(dtype=tf.int32, shape=[None, word_max_len])
@@ -32,8 +34,12 @@ with tf.name_scope("CharacterLayer"):
         char_train = tf.unstack(value=char_lookup, axis=1)
         # print(char_train)
 
-        char_lstm_cell = rnn.BasicLSTMCell(word_embed_size, forget_bias=1)
-        char_multi_cell = rnn.MultiRNNCell([char_lstm_cell] * 2)
+        char_stacked_rnn = []
+        for l in range(char_layer_multiRnn):
+            char_stacked_rnn.append(rnn.BasicLSTMCell(word_embed_size, forget_bias=1))
+
+        # char_lstm_cell = rnn.BasicLSTMCell(word_embed_size, forget_bias=1)
+        char_multi_cell = rnn.MultiRNNCell(char_stacked_rnn)
         output_words, _ = rnn.static_rnn(cell=char_multi_cell, inputs=char_train, dtype=tf.float32)
         # print(output_words[-1].get_shape())
 
@@ -42,8 +48,12 @@ with tf.name_scope("WordLayer"):
         batch_word_lookup = tf.nn.embedding_lookup(output_words[-1], word_id)
         word_train = tf.unstack(batch_word_lookup, axis=1)
 
-        word_lstm_cell = rnn.BasicLSTMCell(sent_embed_size, forget_bias=1)
-        word_multi_cell = rnn.MultiRNNCell([word_lstm_cell] * 3)
+        word_stacked_rnn = []
+        for _ in range(word_layer_multiRnn):
+            word_stacked_rnn.append(rnn.BasicLSTMCell(sent_embed_size, forget_bias=1))
+
+        # word_lstm_cell = rnn.BasicLSTMCell(sent_embed_size, forget_bias=1)
+        word_multi_cell = rnn.MultiRNNCell(word_stacked_rnn)
         output_sent, _ = rnn.static_rnn(cell=word_multi_cell, inputs=word_train, dtype=tf.float32)
         # print(output_sent[-1].get_shape())
         output_sent = tf.concat(output_sent, axis=0)
