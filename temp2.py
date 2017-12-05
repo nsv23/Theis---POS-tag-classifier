@@ -7,10 +7,10 @@ import numpy as np
 itr = 1000   # 198 full read
 reset_point = 198
 start = 0
-batch_size_counter = 251
-batch_size = 251
-sent_max_len = 40
-word_max_len = 25
+batch_size_counter = 10
+batch_size = 10
+sent_max_len = 12
+word_max_len = 6
 char_codes = 91
 char_embed_size = 50
 word_embed_size = 500
@@ -64,15 +64,15 @@ with tf.name_scope("ForwardLayer"):
     h_layer_weights = tf.Variable(tf.random_normal([sent_embed_size, no_of_classes]))
     h_layer_bias = tf.Variable(tf.zeros([no_of_classes]))
     predicted_output = tf.matmul(output_sent, h_layer_weights) + h_layer_bias
-    print(predicted_output)                                                               # shape=(12550, 45)
+    # print(predicted_output)                                                               # shape=(12550, 45)
 
 with tf.name_scope("CostFunction"):
     y_reshape = tf.reshape(y, [-1, 1])                                                      # (1200,1)*
     # y_reshape = tf.reshape(y, [-1])                                                       # Tensor("CostFunction/Reshape:0", shape=(1200,), dtype=int32)
-    print(y_reshape)
+    # print(y_reshape)
     weights = tf.cast(tf.where(y_reshape > 0, tf.ones_like(y_reshape), tf.zeros_like(y_reshape)), tf.float32)
     y_reshape = tf.one_hot(y_reshape, depth=no_of_classes)
-    print(y_reshape)                                                                       # Tensor("CostFunction/one_hot:0", shape=(1200, 45), dtype=float32) # shape=(12550, 1, 45)*
+    # print(y_reshape)                                                                       # Tensor("CostFunction/one_hot:0", shape=(1200, 45), dtype=float32) # shape=(12550, 1, 45)*
     # y_reshape = tf.unstack(y_reshape, axis=1)
     # print(y_reshape)                                                                     # shape=(12550, 45)*
     loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=predicted_output, labels=y_reshape) * weights)
@@ -107,10 +107,12 @@ with tf.Session() as sess:
             # print((np.shape(pos_id_batch)))
             start = batch_size_counter
             batch_size_counter = batch_size + batch_size_counter
-            sess.run(train_op, feed_dict=feed_dict)
-            if (i % 10) == 0:
-                _, cost, acc_result = sess.run((train_op, loss, accuracy), feed_dict=feed_dict)
-                print('Cost and accuracy for iteration %d is %0.3f and %0.3f:' % (i, cost, acc_result))
+            # sess.run(train_op, feed_dict=feed_dict)
+            _, cost, acc_result = sess.run((train_op, loss, accuracy), feed_dict=feed_dict)
+            print('Cost and accuracy for iteration %d is %0.3f and %0.3f:' % (i, cost, acc_result))
+            # if (i % 10) == 0:
+            #     _, cost, acc_result = sess.run((train_op, loss, accuracy), feed_dict=feed_dict)
+            #     print('Cost and accuracy for iteration %d is %0.3f and %0.3f:' % (i, cost, acc_result))
         else:
             # print("hello")
             start = 0
