@@ -107,7 +107,6 @@ with tf.Session() as sess:
             # print((np.shape(pos_id_batch)))
             start = batch_size_counter
             batch_size_counter = batch_size + batch_size_counter
-            # sess.run(train_op, feed_dict=feed_dict)
             sess.run(train_op, feed_dict=feed_dict)
             if (i % 10) == 0:
                 _, cost, acc_result = sess.run((train_op, loss, accuracy), feed_dict=feed_dict)
