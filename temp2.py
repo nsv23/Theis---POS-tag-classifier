@@ -8,7 +8,7 @@ itr = 1000   # 198 full read
 reset_point = 198
 start = 0
 batch_size_counter = 2
-batch_size = 5
+batch_size = 2
 sent_max_len = 6
 word_max_len = 8
 char_codes = 91
@@ -84,6 +84,8 @@ with tf.Session() as sess:
         feed_dict = {char_id: char_id_batch, word_id: word_id_batch, y: pos_id_batch}
         w = word_id_batch
         os_o, os_c = sess.run((output_sent, output_sent2), feed_dict=feed_dict)
+        start = batch_size_counter
+        batch_size_counter = batch_size + batch_size_counter
         print("Iteration: ", i)
         print('\n')
         print(w)
