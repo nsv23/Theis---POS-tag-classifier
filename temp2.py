@@ -42,7 +42,9 @@ with tf.name_scope("WordLayer"):
         word_lstm_cell = rnn.BasicLSTMCell(sent_embed_size, forget_bias=1)
         output_sent, _ = rnn.static_rnn(word_lstm_cell, word_train, dtype=tf.float32)
         # print(output_sent[-1].get_shape())
-        output_sent = tf.concat(output_sent, axis=0)
+        # output_sent = tf.concat(output_sent, axis=0)
+        output_sent = tf.stack(output_sent, axis=1)
+        output_sent = tf.reshape(output_sent, [-1, sent_embed_size])
         # output_sent = tf.reshape(output_sent, [-1, sent_embed_size])
         # print(output_sent)                                                                # shape=(12550, 600)
 
