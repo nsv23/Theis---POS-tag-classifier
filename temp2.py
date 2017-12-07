@@ -43,12 +43,14 @@ with tf.name_scope("WordLayer"):
         word_train = tf.unstack(batch_word_lookup, axis=1)
         word_lstm_cell = rnn.BasicLSTMCell(sent_embed_size, forget_bias=1)
         output_sent, _ = rnn.static_rnn(word_lstm_cell, word_train, dtype=tf.float32)
-        output_sent2 = tf.stack(output_sent, axis=1)
+        output_sent2 = tf.concat(output_sent, axis=1)
+        output_sent22 = tf.stack(output_sent, axis=1)
         # print(output_sent[-1].get_shape())
         # for i in range(sent_max_len):
         #     os.append(output_sent[0])
         # output_sent2 = tf.concat(output_sent, axis=0)
         output_sent3 = tf.reshape(output_sent2, [-1, sent_embed_size])
+        output_sent33 = tf.reshape(output_sent22, [-1, sent_embed_size])
         # for j in range(batch_size):
         #     for i in range(sent_max_len):
         #         c = i * batch_size + j
@@ -95,7 +97,7 @@ with tf.Session() as sess:
         char_id_batch, word_id_batch, pos_id_batch = temp1.retrieve_batch_sent(start, batch_size_counter, sent_max_len, word_max_len)
         feed_dict = {char_id: char_id_batch, word_id: word_id_batch, y: pos_id_batch}
         w = word_id_batch
-        os_o, os_c, t = sess.run((output_sent, output_sent2, output_sent3), feed_dict=feed_dict)
+        os_o, os_c, t, os_c1, t1 = sess.run((output_sent, output_sent2, output_sent3, output_sent22, output_sent33), feed_dict=feed_dict)
         start = batch_size_counter
         batch_size_counter = batch_size + batch_size_counter
         print("Iteration: ", i)
@@ -106,6 +108,12 @@ with tf.Session() as sess:
         print(os_c)
         print('\n')
         print(t)
+        print('\n')
+
+        print('\n')
+        print(os_c1)
+        print('\n')
+        print(t1)
         print('\n')
 
     # for i in range(1, itr):

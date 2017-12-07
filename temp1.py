@@ -201,10 +201,10 @@ with open('penntreebank.conllx', 'r') as f:
 #
 # print(res_sentences)
 
-print(len(sentences))
-print(len(pos_temp))
-print(len(test_sentences))
-print(len(test_pos_temp))
+# print(len(sentences))
+# print(len(pos_temp))
+# print(len(test_sentences))
+# print(len(test_pos_temp))
 
 
 def retrieve_batch_sent(start, end, sent_max_len, word_max_len):
