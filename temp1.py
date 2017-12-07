@@ -5,7 +5,9 @@ import numpy as np
 words = []
 pos_tags = []
 sentences = []
+test_sentences = []
 pos_temp = []
+test_pos_temp = []
 
 char_codes = {
             0 : 0,
@@ -164,10 +166,17 @@ with open('penntreebank.conllx', 'r') as f:
             words.append(row[1])
             pos_tags.append(row[3])
         else:
-            sentences.append(words)
-            pos_temp.append(pos_tags)
-            words = []
-            pos_tags = []
+            if len(sentences) < 39208:
+                sentences.append(words)
+                pos_temp.append(pos_tags)
+                words = []
+                pos_tags = []
+            else:
+                test_sentences.append(words)
+                test_pos_temp.append(pos_tags)
+                words = []
+                pos_tags = []
+
 # print(pos_temp)
 
 
@@ -191,6 +200,11 @@ with open('penntreebank.conllx', 'r') as f:
 #     res_sentences.append(res_sentence)
 #
 # print(res_sentences)
+
+print(len(sentences))
+print(len(pos_temp))
+print(len(test_sentences))
+print(len(test_pos_temp))
 
 
 def retrieve_batch_sent(start, end, sent_max_len, word_max_len):
