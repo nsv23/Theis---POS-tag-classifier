@@ -64,7 +64,7 @@ with tf.name_scope("ForwardLayer"):
     h_layer_weights = tf.Variable(tf.random_normal([sent_embed_size, no_of_classes]))
     h_layer_bias = tf.Variable(tf.zeros([no_of_classes]))
     predicted_output = tf.matmul(output_sent3, h_layer_weights) + h_layer_bias
-    # print(predicted_output)                                                               # shape=(12550, 45)
+    # print(predicted_output)                                                             # shape=(12550, 45)
 
 with tf.name_scope("CostFunction"):
     # y_reshape = tf.reshape(y, [-1, 1])                                                  # (12550,1)*
