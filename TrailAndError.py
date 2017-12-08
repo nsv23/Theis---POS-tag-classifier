@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.contrib import rnn
-import temp1
+import Reader
 import numpy as np
 
 # General variables
@@ -94,7 +94,7 @@ with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
 
     for i in range(1):
-        char_id_batch, word_id_batch, pos_id_batch = temp1.retrieve_batch_sent(start, batch_size_counter, sent_max_len, word_max_len)
+        char_id_batch, word_id_batch, pos_id_batch = Reader.retrieve_batch_sent(start, batch_size_counter, sent_max_len, word_max_len)
         feed_dict = {char_id: char_id_batch, word_id: word_id_batch, y: pos_id_batch}
         w = word_id_batch
         os_o, os_c, t, os_c1, t1 = sess.run((output_sent, output_sent2, output_sent3, output_sent22, output_sent33), feed_dict=feed_dict)
