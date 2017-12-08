@@ -3,6 +3,9 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludePattern pattern="*.txt" />
+      <excludePattern pattern="penntreebank.conllx" />
+      <excludePattern pattern="t.py" />
+      <excludePattern pattern="temp.py" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
