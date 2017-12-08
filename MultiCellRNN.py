@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.contrib import rnn
-import temp1
+import Reader
 import numpy as np
 
 # General variables
@@ -93,7 +93,7 @@ with tf.Session() as sess:
 
     for i in range(1, itr):
         if i%reset_point != 0:
-            char_id_batch, word_id_batch, pos_id_batch = temp1.retrieve_batch_sent(start, batch_size_counter, sent_max_len, word_max_len)
+            char_id_batch, word_id_batch, pos_id_batch = Reader.retrieve_batch_sent(start, batch_size_counter, sent_max_len, word_max_len)
             feed_dict = {char_id: char_id_batch, word_id: word_id_batch, y: pos_id_batch}
             # char_id_batch = np.ndarray(char_id_batch)
             # print("\nprinting char ids")
