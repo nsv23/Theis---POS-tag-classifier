@@ -5,7 +5,9 @@ import numpy as np
 words = []
 pos_tags = []
 sentences = []
+test_sentences = []
 pos_temp = []
+test_pos_temp = []
 
 char_codes = {
             0 : 0,
@@ -164,10 +166,17 @@ with open('penntreebank.conllx', 'r') as f:
             words.append(row[1])
             pos_tags.append(row[3])
         else:
-            sentences.append(words)
-            pos_temp.append(pos_tags)
-            words = []
-            pos_tags = []
+            if len(sentences) < 39208:
+                sentences.append(words)
+                pos_temp.append(pos_tags)
+                words = []
+                pos_tags = []
+            else:
+                test_sentences.append(words)
+                test_pos_temp.append(pos_tags)
+                words = []
+                pos_tags = []
+
 # print(pos_temp)
 
 
@@ -192,6 +201,11 @@ with open('penntreebank.conllx', 'r') as f:
 #
 # print(res_sentences)
 
+# print(len(sentences))
+# print(len(pos_temp))
+# print(len(test_sentences))
+# print(len(test_pos_temp))
+
 
 def retrieve_batch_sent(start, end, sent_max_len, word_max_len):
     word_voc = []
@@ -206,7 +220,7 @@ def retrieve_batch_sent(start, end, sent_max_len, word_max_len):
     ind_pos_row = []
 
     for s in islice(sentences, start, end):
-        # print(s)
+        # print(s[:6])
         batch_sentences.append(s)
         for j in range(len(s)):
             if s[j] not in word_voc:
@@ -220,6 +234,7 @@ def retrieve_batch_sent(start, end, sent_max_len, word_max_len):
             if w in word_voc:
                 index = word_voc.index(w)
                 temp_ind_sent.append(index)
+        # print(temp_ind_sent)
         temp_sent_pad = [0] * sent_max_len
         if len(temp_ind_sent) < sent_max_len:
             temp_sent_pad[:len(temp_ind_sent)] = temp_ind_sent
@@ -228,6 +243,7 @@ def retrieve_batch_sent(start, end, sent_max_len, word_max_len):
 
         # temp_sent_pad[:sent_max_len] = temp_ind_sent
         word_id_mat.append(temp_sent_pad)
+        # print(word_id_mat)
         temp_ind_sent = []
 
     for r in batch_pos:
@@ -313,3 +329,14 @@ def retrieve_batch_sent(start, end, sent_max_len, word_max_len):
 #         char_words[i][word_max_size-1] =_EOW
 #
 # print(char_words)
+
+
+# batch_size_counter = 3
+# batch_size = 3
+# start = 0
+# for i in range(2):
+#     print("Iteration: ", i)
+#     retrieve_batch_sent(start, batch_size_counter, 6, 8)
+#     start = batch_size_counter
+#     batch_size_counter = batch_size + batch_size_counter
+#     print('\n')
