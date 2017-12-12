@@ -19,6 +19,7 @@ no_of_classes = 45
 learning_rate = 0.01
 char_layer_multiRnn = 2
 word_layer_multiRnn = 3
+neurons_hidden_layer_1 = 400
 
 # Placeholder
 char_id = tf.placeholder(dtype=tf.int32, shape=[None, word_max_len])
@@ -61,10 +62,14 @@ with tf.name_scope("WordLayer"):
         # print(output_sent)                                                                # shape=(12550, 600)
 
 with tf.name_scope("ForwardLayer"):
-    h_layer_weights = tf.Variable(tf.random_normal([sent_embed_size, no_of_classes]))
-    h_layer_bias = tf.Variable(tf.zeros([no_of_classes]))
-    predicted_output = tf.matmul(output_sent, h_layer_weights) + h_layer_bias
-    # print(predicted_output)                                                               # shape=(12550, 45)
+    h_layer_weights_1 = tf.Variable(tf.random_normal([sent_embed_size, neurons_hidden_layer_1]))
+    h_layer_bias_1 = tf.Variable(tf.zeros([neurons_hidden_layer_1]))
+    predicted_output_1 = tf.matmul(output_sent, h_layer_weights_1) + h_layer_bias_1
+
+    h_layer_weights_2 = tf.Variable(tf.random_normal([neurons_hidden_layer_1, no_of_classes]))
+    h_layer_bias_2 = tf.Variable(tf.zeros([no_of_classes]))
+    predicted_output_2 = tf.matmul(predicted_output_1, h_layer_weights_2) + h_layer_bias_2
+    # print(predicted_output_2)                                                               # shape=(12550, 45)
 
 with tf.name_scope("CostFunction"):
     # y_reshape = tf.reshape(y, [-1, 1])                                                      # (1200,1)*
@@ -75,16 +80,16 @@ with tf.name_scope("CostFunction"):
     # print(y_reshape)                                                                       # Tensor("CostFunction/one_hot:0", shape=(1200, 45), dtype=float32) # shape=(12550, 1, 45)*
     # y_reshape = tf.unstack(y_reshape, axis=1)
     # print(y_reshape)                                                                     # shape=(12550, 45)*
-    loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=predicted_output, labels=y_reshape) * weights)
+    loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=predicted_output_2, labels=y_reshape) * weights)
 
 with tf.name_scope("Optimizer"):
     train_op = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(loss)
     # train_op = tf.train.GradientDescentOptimizer(learning_rate=learning_rate).minimize(loss)
 
 with tf.name_scope("Accuracy"):
-    # print(predicted_output.get_shape())
+    # print(predicted_output_2.get_shape())
     # print(y_reshape)
-    correct_prediction = tf.equal(tf.argmax(predicted_output, 1), tf.argmax(y_reshape, 1))
+    correct_prediction = tf.equal(tf.argmax(predicted_output_2, 1), tf.argmax(y_reshape, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
 # Graph executions
