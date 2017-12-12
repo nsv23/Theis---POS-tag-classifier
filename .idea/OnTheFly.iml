@@ -7,7 +7,7 @@
       <excludePattern pattern="temp.py" />
       <excludePattern pattern="*.conllx" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="Remote Python 3.4.3 (ssh://nekkanti@bronte.diism.unisi.it:22/usr/bin/python3.4)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TestRunnerService">
