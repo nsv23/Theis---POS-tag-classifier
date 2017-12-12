@@ -98,7 +98,7 @@ with tf.Session() as sess:
         char_id_batch, word_id_batch, pos_id_batch = Reader.retrieve_batch_sent(start, batch_size_counter, sent_max_len, word_max_len)
         feed_dict = {char_id: char_id_batch, word_id: word_id_batch, y: pos_id_batch}
         w = word_id_batch
-        os_o, os_w, os_c, t, os_c1, t1 = sess.run((output_sent, output_sent1, output_sent3, output_sent22, output_sent33), feed_dict=feed_dict)
+        os_o, os_w, os_c, os_cr, os_s, os_sr = sess.run((output_sent, output_sent1, output_sent2, output_sent3, output_sent22, output_sent33), feed_dict=feed_dict)
         start = batch_size_counter
         batch_size_counter = batch_size + batch_size_counter
         print("Iteration: ", i)
@@ -114,15 +114,15 @@ with tf.Session() as sess:
         print(os_c)
         print('\n')
         print("Printing concated reshape output")
-        print(t)
+        print(os_cr)
         print('\n')
 
         print('\n')
         print("Printing stacked output")
-        print(os_c1)
+        print(os_s)
         print('\n')
         print("Printing stacked reshape output")
-        print(t1)
+        print(os_sr)
         print('\n')
 
     # for i in range(1, itr):
