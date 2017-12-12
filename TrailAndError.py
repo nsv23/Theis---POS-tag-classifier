@@ -9,12 +9,12 @@ reset_point = 198
 start = 0
 batch_size_counter = 2
 batch_size = 2
-sent_max_len = 6
+sent_max_len = 4
 word_max_len = 8
 char_codes = 91
 char_embed_size = 2
 word_embed_size = 3
-sent_embed_size = 6
+sent_embed_size = 3
 no_of_classes = 4
 learning_rate = 0.001
 # os = []
@@ -43,6 +43,7 @@ with tf.name_scope("WordLayer"):
         word_train = tf.unstack(batch_word_lookup, axis=1)
         word_lstm_cell = rnn.BasicLSTMCell(sent_embed_size, forget_bias=1)
         output_sent, _ = rnn.static_rnn(word_lstm_cell, word_train, dtype=tf.float32)
+        output_sent1 = tf.concat(output_sent, axis = 0)
         output_sent2 = tf.concat(output_sent, axis=1)
         output_sent22 = tf.stack(output_sent, axis=1)
         # print(output_sent[-1].get_shape())
@@ -97,22 +98,30 @@ with tf.Session() as sess:
         char_id_batch, word_id_batch, pos_id_batch = Reader.retrieve_batch_sent(start, batch_size_counter, sent_max_len, word_max_len)
         feed_dict = {char_id: char_id_batch, word_id: word_id_batch, y: pos_id_batch}
         w = word_id_batch
-        os_o, os_c, t, os_c1, t1 = sess.run((output_sent, output_sent2, output_sent3, output_sent22, output_sent33), feed_dict=feed_dict)
+        os_o, os_w, os_c, t, os_c1, t1 = sess.run((output_sent, output_sent1, output_sent3, output_sent22, output_sent33), feed_dict=feed_dict)
         start = batch_size_counter
         batch_size_counter = batch_size + batch_size_counter
         print("Iteration: ", i)
         print(w)
         print('\n')
+        print("Printing Original output")
         print(os_o)
         print('\n')
+        print("Printing Original output concated axis = 0")
+        print(os_w)
+        print('\n')
+        print("Printing concated output")
         print(os_c)
         print('\n')
+        print("Printing concated reshape output")
         print(t)
         print('\n')
 
         print('\n')
+        print("Printing stacked output")
         print(os_c1)
         print('\n')
+        print("Printing stacked reshape output")
         print(t1)
         print('\n')
 
