@@ -1,6 +1,6 @@
 import csv
 from itertools import islice
-import numpy as np
+# import numpy as np
 
 words = []
 pos_tags = []
