@@ -116,8 +116,6 @@ with tf.Session() as sess:
         print("Printing concated reshape output")
         print(os_cr)
         print('\n')
-
-        print('\n')
         print("Printing stacked output")
         print(os_s)
         print('\n')
