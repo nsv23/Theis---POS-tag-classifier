@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="8a28d379-d2cf-4f8e-a716-513d6604e40e" name="Bronte" url="http://bronte.diism.unisi.it">
-        <fileTransfer host="bronte.diism.unisi.it" port="22" rootFolder="/home/nekkanti/thesis" accessType="SFTP">
+        <fileTransfer host="bronte.diism.unisi.it" port="22" rootFolder="/home/nekkanti/thesis/basic" accessType="SFTP">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" />
           </advancedOptions>
