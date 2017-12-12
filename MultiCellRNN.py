@@ -4,7 +4,7 @@ import Reader
 import numpy as np
 
 # General variables
-itr = 1000   # 198 full read
+itr = 10000   # 198 full read
 reset_point = 198
 start = 0
 batch_size_counter = 251
