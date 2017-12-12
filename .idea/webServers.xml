@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="8a28d379-d2cf-4f8e-a716-513d6604e40e" name="Bronte" url="http://bronte.diism.unisi.it">
+        <fileTransfer host="bronte.diism.unisi.it" port="22" rootFolder="/home/nekkanti/thesis" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
