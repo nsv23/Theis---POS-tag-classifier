@@ -57,7 +57,8 @@ with tf.name_scope("WordLayer"):
         word_multi_cell = rnn.MultiRNNCell(word_stacked_rnn)
         output_sent, _ = rnn.static_rnn(cell=word_multi_cell, inputs=word_train, dtype=tf.float32)
         # print(output_sent[-1].get_shape())
-        output_sent = tf.concat(output_sent, axis=0)
+        output_sent = tf.concat(output_sent, axis=1)
+        output_sent = tf.reshape(output_sent, [-1, sent_max_len])
         # output_sent = tf.reshape(output_sent, [-1, sent_embed_size])
         # print(output_sent)                                                                # shape=(12550, 600)
 
