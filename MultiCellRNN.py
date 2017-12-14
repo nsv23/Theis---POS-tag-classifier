@@ -117,6 +117,8 @@ with tf.Session() as sess:
             # print(i)
             if (i % 10) == 0:
                 _, cost, acc_result = sess.run((train_op, loss, accuracy), feed_dict=feed_dict)
+                with open("cost,accuracy.txt", 'w') as w:
+                    w.write('Cost and accuracy for iteration %d is %0.3f and %0.3f:' % (i, cost, acc_result))
                 print('Cost and accuracy for iteration %d is %0.3f and %0.3f:' % (i, cost, acc_result))
         else:
             # print("hello")
