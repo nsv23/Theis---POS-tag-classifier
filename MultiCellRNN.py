@@ -5,10 +5,10 @@ import numpy as np
 
 # General variables
 itr = 10000   # 198 full read
-reset_point = 198
+reset_point = 158
 start = 0
-batch_size_counter = 251
-batch_size = 251
+batch_size_counter = 250
+batch_size = 250
 sent_max_len = 40
 word_max_len = 25
 char_codes = 91
@@ -115,6 +115,9 @@ with tf.Session() as sess:
             batch_size_counter = batch_size + batch_size_counter
             sess.run(train_op, feed_dict=feed_dict)
             # print(i)
+            # print(len(word_id_batch))
+            # print(len(pos_id_batch))
+            # print('\n')
             if (i % 10) == 0:
                 _, cost, acc_result = sess.run((train_op, loss, accuracy), feed_dict=feed_dict)
                 with open("cost,accuracy.txt", 'w') as w:
@@ -123,5 +126,5 @@ with tf.Session() as sess:
         else:
             # print("hello")
             start = 0
-            batch_size_counter = 251
-            batch_size = 251
+            batch_size_counter = 250
+            batch_size = 250
