@@ -8,6 +8,7 @@ sentences = []
 test_sentences = []
 pos_temp = []
 test_pos_temp = []
+path = '/home/nekkanti/thesis/penntreebank.conllx'
 
 char_codes = {
             0 : 0,
@@ -159,7 +160,7 @@ pos_ind_values = {
             "#": 45
         }
 
-with open('penntreebank.conllx', 'r') as f:
+with open(path, 'r') as f:
     reader = csv.reader(f, delimiter='\t')
     for row in reader:
         if len(row) != 0:
