@@ -4,17 +4,17 @@ import Reader
 import numpy as np
 
 # General variables
-itr = 1000   # 198 full read
-reset_point = 198
+itr = 8850   # 198 full read
+reset_point = 178
 start = 0
-batch_size_counter = 251
-batch_size = 251
+batch_size_counter = 250
+batch_size = 250
 sent_max_len = 40
 word_max_len = 25
 char_codes = 91
 char_embed_size = 50
-word_embed_size = 300
-sent_embed_size = 600
+word_embed_size = 500
+sent_embed_size = 300
 no_of_classes = 45
 learning_rate = 0.001
 
@@ -100,10 +100,9 @@ with tf.Session() as sess:
             sess.run(train_op, feed_dict=feed_dict)
             # print('Loss adn accuracy at iteration %d is: %0.3f and %0.3f' % (i, cost, acc_result))
             if (i % 10) == 0:
-               _, cost, acc_result= sess.run((train_op, loss, accuracy), feed_dict=feed_dict)
+               cost, acc_result= sess.run((loss, accuracy), feed_dict=feed_dict)
                print('Loss and accuracy at iteration %d is: %0.3f and %0.3f' % (i, cost, acc_result))
         else:
             # print("hello")
             start = 0
-            batch_size_counter = 251
-            batch_size = 251
+            batch_size_counter = batch_size

@@ -8,6 +8,7 @@ sentences = []
 test_sentences = []
 pos_temp = []
 test_pos_temp = []
+train_samples_no = 44208
 
 char_codes = {
             0 : 0,
@@ -166,7 +167,7 @@ with open('penntreebank.conllx', 'r') as f:
             words.append(row[1])
             pos_tags.append(row[3])
         else:
-            if len(sentences) < 39208:
+            if len(sentences) < train_samples_no:
                 sentences.append(words)
                 pos_temp.append(pos_tags)
                 words = []
