@@ -2,6 +2,7 @@ import tensorflow as tf
 from tensorflow.contrib import rnn
 import Reader
 import numpy as np
+from collections import defaultdict
 
 # General variables
 itr = 10000   # 198 full read
@@ -20,6 +21,10 @@ learning_rate = 0.01
 char_layer_multiRnn = 2
 word_layer_multiRnn = 3
 neurons_hidden_layer_1 = 400
+iter_values = []
+cost_values = []
+accu_values = []
+iter_cost_accuracy = defaultdict()
 
 # Placeholder
 char_id = tf.placeholder(dtype=tf.int32, shape=[None, word_max_len])
@@ -96,7 +101,9 @@ with tf.name_scope("Accuracy"):
 # Graph executions
 with tf.Session() as sess:
     sess.run(tf.global_variables_initializer())
-
+    with open("result.txt", 'w') as e:
+        pass
+    e.close()
     for i in range(1, itr):
         if i%reset_point != 0:
             char_id_batch, word_id_batch, pos_id_batch = Reader.retrieve_batch_sent(start, batch_size_counter, sent_max_len, word_max_len)
@@ -119,7 +126,12 @@ with tf.Session() as sess:
             # print(len(pos_id_batch))
             # print('\n')
             if (i % 10) == 0:
-                _, cost, acc_result = sess.run((train_op, loss, accuracy), feed_dict=feed_dict)
+                cost, acc_result = sess.run((loss, accuracy), feed_dict=feed_dict)
+                iter_cost_accuracy[i].append(loss)
+                iter_cost_accuracy[i].append(acc_result)
+                iter_values.append(i)
+                cost_values.append(loss)
+                accu_values.append(acc_result)
                 with open("result.txt", 'a') as w:
                     w.write('Cost and accuracy for iteration %d is %0.3f and %0.3f. ' % (i, cost, acc_result))
                     w.write('\n')
@@ -127,5 +139,4 @@ with tf.Session() as sess:
         else:
             # print("hello")
             start = 0
-            batch_size_counter = 250
-            batch_size = 250
+            batch_size_counter = batch_size
